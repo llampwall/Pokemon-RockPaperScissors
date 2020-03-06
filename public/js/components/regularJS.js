@@ -130,6 +130,7 @@ function playerAttack(stack) {
   var critical = Math.random() / 5;
   var damage = Math.floor(gameState.userPokemon.attack * gameState.userPokemon.level * (stack + critical));
   console.log("player 1 did " + damage + " damage to computer");
+  var oldHealth = gameState.cpuPokemon.health;
   gameState.cpuPokemon.health -= damage;
 
   // adjust health bar
@@ -137,17 +138,43 @@ function playerAttack(stack) {
   var total = calculateInitialHealth(gameState.cpuPokemon);
   var percent = Math.floor(gameState.cpuPokemon.health / total * 100);
   console.log(percent);
-  if (percent < 0) {
-    cpuHB.style.width = '0%';
-    // cpuHB.style.background = 'black';
-  } else if (percent < 25) {
-    cpuHB.style.background = 'red';
-  } else if (percent < 50) {
-    cpuHB.style.background = 'yellow';
-  }
-  cpuHB.style.width = percent + '%';
-  if (gameState.cpuPokemon.health < 0) {
-    gameState.cpuPokemon.health = 0;
+
+  // if (percent < 0) {
+  //   cpuHB.style.width = '0%'
+  // } else if (percent < 25) {
+  //   cpuHB.style.background = 'red'
+  // } else if (percent < 50) {
+  //   cpuHB.style.background = 'yellow'
+  // }
+  // cpuHB.style.width = percent + '%'
+  // if (gameState.cpuPokemon.health < 0) {
+  //   gameState.cpuPokemon.health = 0;
+  // }
+
+  // count down quickly
+  var number = oldHealth;
+  var target = gameState.cpuPokemon.health;
+  if (target < number) {
+    var interval = setInterval(function () {
+      var newPercent = Math.floor(number / total * 100);
+      if (newPercent < 0) {
+        cpuHB.style.width = '0%';
+      } else if (newPercent < 25) {
+        cpuHB.style.background = 'red';
+      } else if (newPercent < 50) {
+        cpuHB.style.background = 'yellow';
+      }
+      cpuHB.style.width = newPercent + '%';
+      if (gameState.cpuPokemon.health < 0) {
+        gameState.cpuPokemon.health = 0;
+      }
+      cpuLeft.innerHTML = number + '/' + calculateInitialHealth(gameState.userPokemon);
+      if (target >= number) {
+        clearInterval(interval);
+        return;
+      }
+      number--;
+    }, 10);
   }
   cpuLeft.innerHTML = gameState.cpuPokemon.health + '/' + calculateInitialHealth(gameState.cpuPokemon);
 }
@@ -156,6 +183,7 @@ function cpuDoAttack(stack) {
   var critical = Math.random() / 5;
   var damage = Math.floor(gameState.cpuPokemon.attack * gameState.cpuPokemon.level * (stack + critical));
   console.log("computer did " + damage + " damage to player");
+  var oldHealth = gameState.userPokemon.health;
   gameState.userPokemon.health -= damage;
 
   // adjust health bar
@@ -163,17 +191,44 @@ function cpuDoAttack(stack) {
   var total = calculateInitialHealth(gameState.userPokemon);
   var percent = Math.floor(gameState.userPokemon.health / total * 100);
   console.log(percent);
-  if (percent < 0) {
-    playerHB.style.width = '0%';
-    // playerHB.style.background = 'black';
-  } else if (percent < 25) {
-    playerHB.style.background = 'red';
-  } else if (percent < 50) {
-    playerHB.style.background = 'yellow';
-  }
-  playerHB.style.width = percent + '%';
-  if (gameState.userPokemon.health < 0) {
-    gameState.userPokemon.health = 0;
+
+  // if (percent < 0) {
+  //   playerHB.style.width = '0%'
+  // } else if (percent < 25) {
+  //   playerHB.style.background = 'red'
+  // } else if (percent < 50) {
+  //   playerHB.style.background = 'yellow'
+  // }
+  // playerHB.style.width = percent + '%'
+  // if (gameState.userPokemon.health < 0) {
+  //   gameState.userPokemon.health = 0;
+  // }
+
+  // count down quickly
+  var number = oldHealth;
+  var target = gameState.userPokemon.health;
+  if (target < number) {
+    var interval = setInterval(function () {
+      var newPercent = Math.floor(number / total * 100);
+      if (newPercent < 0) {
+        playerHB.style.width = '0%';
+      } else if (newPercent < 25) {
+        playerHB.style.background = 'red';
+      } else if (newPercent < 50) {
+        playerHB.style.background = 'yellow';
+      }
+      playerHB.style.width = newPercent + '%';
+      if (gameState.userPokemon.health < 0) {
+        gameState.userPokemon.health = 0;
+      }
+
+      playerLeft.innerHTML = number + '/' + calculateInitialHealth(gameState.userPokemon);
+      if (target >= number) {
+        clearInterval(interval);
+        return;
+      }
+      number--;
+    }, 10);
   }
   playerLeft.innerHTML = gameState.userPokemon.health + '/' + calculateInitialHealth(gameState.userPokemon);
 }
