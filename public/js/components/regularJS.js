@@ -44,6 +44,8 @@ var gameState = {
 };var pokemonsEl = document.querySelector('.select-screen').querySelectorAll('.character');
 var battleScreenEL = document.getElementById('battle-screen');
 var attackButtonsEL = battleScreenEL.querySelectorAll('.attack');
+var playerLeft = document.querySelector('.player1').querySelector('.left');
+var cpuLeft = document.querySelector('.player2').querySelector('.left');
 
 // initial game loop
 var i = 0;
@@ -83,6 +85,10 @@ while (i < pokemonsEl.length) {
     // calculate initial health
     gameState.userPokemon.health = calculateInitialHealth(gameState.userPokemon);
     gameState.cpuPokemon.health = calculateInitialHealth(gameState.cpuPokemon);
+
+    // display health
+    playerLeft.innerHTML = gameState.userPokemon.health + '/' + gameState.userPokemon.health;
+    cpuLeft.innerHTML = gameState.cpuPokemon.health + '/' + gameState.cpuPokemon.health;
   };
   i++;
 }
@@ -132,13 +138,18 @@ function playerAttack(stack) {
   var percent = Math.floor(gameState.cpuPokemon.health / total * 100);
   console.log(percent);
   if (percent < 0) {
-    cpuHB.style.background = 'black';
+    cpuHB.style.width = '0%';
+    // cpuHB.style.background = 'black';
   } else if (percent < 25) {
     cpuHB.style.background = 'red';
   } else if (percent < 50) {
     cpuHB.style.background = 'yellow';
   }
   cpuHB.style.width = percent + '%';
+  if (gameState.cpuPokemon.health < 0) {
+    gameState.cpuPokemon.health = 0;
+  }
+  cpuLeft.innerHTML = gameState.cpuPokemon.health + '/' + calculateInitialHealth(gameState.cpuPokemon);
 }
 
 function cpuDoAttack(stack) {
@@ -153,13 +164,18 @@ function cpuDoAttack(stack) {
   var percent = Math.floor(gameState.userPokemon.health / total * 100);
   console.log(percent);
   if (percent < 0) {
-    playerHB.style.background = 'black';
+    playerHB.style.width = '0%';
+    // playerHB.style.background = 'black';
   } else if (percent < 25) {
     playerHB.style.background = 'red';
   } else if (percent < 50) {
     playerHB.style.background = 'yellow';
   }
   playerHB.style.width = percent + '%';
+  if (gameState.userPokemon.health < 0) {
+    gameState.userPokemon.health = 0;
+  }
+  playerLeft.innerHTML = gameState.userPokemon.health + '/' + calculateInitialHealth(gameState.userPokemon);
 }
 
 // check for a winner
@@ -238,15 +254,21 @@ function play() {
       }
       break;
   }
+
+  // check for end game
   if (checkWinner()) {
+
+    // bounce stuff off screen
     var player1Stuff = document.querySelector('.player1');
     var player2Stuff = document.querySelector('.player2');
     var aButtons = document.getElementById('battle-screen').querySelector('.battle-btns');
     var mainText = document.getElementById('battle-screen').querySelector('.fight-btn');
-    player1Stuff.classList.add('animated', 'bounceOutLeft');
-    player2Stuff.classList.add('animated', 'bounceOutRight');
-    aButtons.classList.add('animated', 'bounceOutDown');
+    player1Stuff.classList.add('animated', 'bounceOutLeft', 'delay-1s');
+    player2Stuff.classList.add('animated', 'bounceOutRight', 'delay-1s');
+    aButtons.classList.add('animated', 'bounceOutDown', 'delay-1s');
     mainText.classList.add('animated', 'fadeOut', 'delay-1s');
+
+    // display win/loss/draw text
     mainText.addEventListener('animationend', function () {
       switch (gameState.win) {
         case 'win':
@@ -261,15 +283,12 @@ function play() {
       }
       mainText.classList.remove('fadeOut');
       mainText.removeEventListener('animationend', function () {
-        mainText.classList.add('animated', 'fadeIn', 'slow');
+        mainText.classList.add('fadeIn', 'slow');
       });
+
+      // display reset button
       var resetBtn = document.getElementById('battle-screen').querySelector('.again');
       resetBtn.style.display = 'flex';
-      // var resetBtn = document.createElement("BUTTON")
-      // var resetText = document.createTextNode("Play Again")
-      // resetBtn.onclick = "function() {location.reload()}"
-      // resetBtn.appendChild(resetText)
-      // mainText.appendChild(resetBtn)
     });
   }
 }

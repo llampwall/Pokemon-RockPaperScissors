@@ -137,14 +137,22 @@ body {
 }
 
 #battle-screen .again {
+  background: #0a0618;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #0a0618 0%, #261c53 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #0a0618 0%,#261c53 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #0a0618 0%,#261c53 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   margin: 0 auto;
   align-items: center;
   justify-content: center;
-  height: 30px;
-  width: 100px;
-  background: white;
-  border-radius: 30px;
+  padding: 20px;
   display: none;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  cursor: pointer;
 }
 
 #battle-screen .battle-btns {
@@ -303,6 +311,11 @@ body {
   float: left;
 }
 
+#battle-screen .player .player1 .stats .health .left {
+  position: relative;
+  top: 3px;
+}
+
 #battle-screen .player .player1 .stats .health .health-bar {
   background: #10120C;
   border-radius: 5px;
@@ -377,6 +390,11 @@ body {
   float: left;
 }
 
+#battle-screen .cpu .player2 .stats .health .left {
+  position: relative;
+  top: 3px;
+}
+
 #battle-screen .cpu .player2 .stats .health .health-bar {
   background: #10120C;
   border-radius: 5px;
@@ -395,7 +413,7 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
-#battle-screen .cpu .player1 .stats .health .health-bar {
+#battle-screen .cpu .player2 .stats .health .health-bar {
   font-family: 'Press Start 2P', cursive;
   font-size: 16px;
 }
