@@ -141,6 +141,9 @@ function playerAttack(stack) {
         if (gameState.cpuPokemon.health < 0) {
           gameState.cpuPokemon.health = 0;
         }
+        if (number < 0){
+          number = 0;
+        }
         cpuLeft.innerHTML = number + '/' + calculateInitialHealth(gameState.userPokemon)
         if (target >= number) {
             clearInterval(interval);
@@ -194,7 +197,9 @@ function cpuDoAttack(stack) {
         if (gameState.userPokemon.health < 0) {
           gameState.userPokemon.health = 0;
         }
-
+        if (number < 0){
+          number = 0;
+        }
         playerLeft.innerHTML = number  + '/' + calculateInitialHealth(gameState.userPokemon)
         if (target >= number) {
             clearInterval(interval);
